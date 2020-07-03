@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO: Instantiate the recyclerview.
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_game_list);
 
         // This piece of code programmatically detects the orientation of the phone and decides
         // how many columns to display in the grid.
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         gridLayoutManager = new GridLayoutManager(this, spanCount);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        // TODO: Instantiate the GameListAdapter and set it in the recyclerview.
+        mGameListAdapter = new GameListAdapter();
+        recyclerView.setAdapter(mGameListAdapter);
     }
 }

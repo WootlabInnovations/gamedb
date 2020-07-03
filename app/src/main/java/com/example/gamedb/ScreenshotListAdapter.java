@@ -13,31 +13,33 @@ import com.bumptech.glide.Glide;
 
 public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAdapter
         .ScreenshotViewHolder> {
-    // TODO: Create an array of sample screenshots using the R.drawable.screenshot resources
-    private int[] mSampleScreenshots = null;
+    private int[] mSampleScreenshots = {
+            R.drawable.screenshot1, R.drawable.screenshot2, R.drawable.screenshot3,
+            R.drawable.screenshot4, R.drawable.screenshot5, R.drawable.screenshot6,
+            R.drawable.screenshot7, R.drawable.screenshot8, R.drawable.screenshot9,
+            R.drawable.screenshot10
+    };
 
     @NonNull
     @Override
     public ScreenshotViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /*
-         * TODO: Create a new view that will be passed to the ScreenshotViewHolder.
-         *  Return the ScreenshotViewHolder
-         */
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.screenshot_list_item,
+                parent, false);
+
+        return new ScreenshotViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ScreenshotViewHolder holder, int position) {
-        /*
-         * TODO: Use the Glide image transformation library to bind the image resources from the
-         *  array to the image view.
-         */
+        Glide.with(holder.mContext)
+                .load(mSampleScreenshots[position])
+                .centerCrop()
+                .into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        // TODO: Return the length of the dataset source.
-        return 0;
+        return mSampleScreenshots.length;
     }
 
     public static class ScreenshotViewHolder extends RecyclerView.ViewHolder {

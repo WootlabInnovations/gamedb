@@ -23,25 +23,23 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     @NonNull
     @Override
     public VideoListViewModel onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /*
-         * TODO: Create a new view that will be passed to the VideoListViewModel.
-         *  Return the VideoListViewModel
-         */
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_list_item,
+                parent, false);
+
+        return new VideoListViewModel(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VideoListViewModel holder, int position) {
-        /*
-         * TODO: Use the Glide image transformation library to bind the image resources from the
-         *  array to the image view.
-         */
+        Glide.with(holder.mContext)
+                .load(mVideoSamples[position])
+                .fitCenter()
+                .into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        // TODO: Return the length of the dataset source.
-        return 0;
+        return mVideoSamples.length;
     }
 
     public static class VideoListViewModel extends RecyclerView.ViewHolder {

@@ -24,17 +24,17 @@ public class GameDetailActivity extends AppCompatActivity {
         screenshotLinearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        /*
-         * TODO: Instantiate ScreenshotListAdapter, screenshot recyclerview, set the layout manager
-         *  and set the screenshot adapter to the recyclerview
-         */
+        mScreenshotListAdapter = new ScreenshotListAdapter();
+        mScreenshotRecyclerView = findViewById(R.id.recycler_view_screenshot_list);
+        mScreenshotRecyclerView.setLayoutManager(screenshotLinearLayoutManager);
+        mScreenshotRecyclerView.setAdapter(mScreenshotListAdapter);
 
         videoLinearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false);
 
-        /*
-         * TODO: Instantiate VideoListAdapter, video recyclerview, set the layout manager
-         *  and set the video adapter to the recyclerview
-         */
+        mVideoListAdapter = new VideoListAdapter();
+        mVideoRecyclerView = findViewById(R.id.recycler_view_video_list);
+        mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
+        mVideoRecyclerView.setAdapter(mVideoListAdapter);
     }
 }

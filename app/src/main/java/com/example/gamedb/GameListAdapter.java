@@ -25,11 +25,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
     @NonNull
     @Override
     public GameListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        /*
-         * TODO: Create a new view that will be passed to the GameListViewHolder.
-         *  Return the GameListViewHolder
-         */
-        return null;
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.game_list_item, parent, false);
+
+        return new GameListViewHolder(view);
     }
 
     @Override
@@ -42,8 +41,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
 
     @Override
     public int getItemCount() {
-        // TODO: Return the length of the dataset source.
-        return 0;
+        return mGamesPosters.length;
     }
 
     public static class GameListViewHolder extends RecyclerView.ViewHolder {
