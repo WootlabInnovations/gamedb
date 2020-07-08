@@ -8,4 +8,6 @@
     <string name="label_sample_storyline">In the ancient, mysterious world of the Jade Empire, you train under your master’s watchful eye and learn powerful martial arts and mystical powers.\n\nWhen danger threatens, you travel across the world, from the harsh mountains of the Land of Howling Spirits to the lush gardens of the Imperial City.\n\nIn your adventures you face powerful human and supernatural foes, learn exotic and magical martial arts, and discover the darkest secrets of the world.\n\nOnly by mastering the greatest fighting styles and defeating the most powerful enemies will you earn your place as a master of martial arts in the world of Jade Empire.</string>
     <string name="label_videos">Videos</string>
     <string name="label_screenshots">Screenshots</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
