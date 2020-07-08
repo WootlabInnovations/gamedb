@@ -45,12 +45,21 @@ public class GameDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_detail, container, false);
 
-        /*
-         * TODO: Create the layout managers for screenshot and video.
-         *  Initialize the adapters for both and attach the layout managers and adapters to their
-         *  respective screenshot and video displays.
-         */
+        screenshotLinearLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false);
 
+        mScreenshotListAdapter = new ScreenshotListAdapter();
+        mScreenshotRecyclerView = view.findViewById(R.id.recycler_view_screenshot_list);
+        mScreenshotRecyclerView.setLayoutManager(screenshotLinearLayoutManager);
+        mScreenshotRecyclerView.setAdapter(mScreenshotListAdapter);
+
+        videoLinearLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+
+        mVideoListAdapter = new VideoListAdapter();
+        mVideoRecyclerView = view.findViewById(R.id.recycler_view_video_list);
+        mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
+        mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
         return view;
     }

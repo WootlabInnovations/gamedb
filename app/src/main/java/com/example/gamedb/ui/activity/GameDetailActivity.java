@@ -14,7 +14,8 @@ public class GameDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // TODO: Attached the GameDetailFragment to the Activity
-        
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_game_detail_container, GameDetailFragment.newInstance(true))
+                .commit();
     }
 }

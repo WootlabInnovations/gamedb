@@ -38,8 +38,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.game_list_item, parent, false);
 
-        // TODO: Return an instance of the GameListViewHolder
-        return null;
+        return new GameListViewHolder(view, mListener);
     }
 
     @Override
@@ -70,8 +69,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: Set the method to listener calls when a click event occurs on the view
-
+                    mListener.onGameSelected(true);
                 }
             });
         }

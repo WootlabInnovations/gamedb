@@ -18,20 +18,24 @@ import com.example.gamedb.ui.fragment.GameListFragment;
 public class MainActivity extends AppCompatActivity implements
         GameListFragment.OnGameListFragmentInteractionListener {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-    /*
-     * TODO: Implement interface method(s) from GameListFragment.
-     *  Ensure to check that the activity contains two panes or one pane to determine whether to
-     *  start the new activity or display a new fragment in the second pane.
-     */
     @Override
     public void onGameSelected(boolean isGameSelected) {
-
+        if (findViewById(R.id.fragment_game_detail_container) != null) {
+            GameDetailFragment gameDetailFragment = GameDetailFragment.newInstance(isGameSelected);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_game_detail_container, gameDetailFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, GameDetailActivity.class);
+            intent.putExtra(GameListFragment.IS_GAME_SELECTED, true);
+            startActivity(intent);
+        }
     }
 }
