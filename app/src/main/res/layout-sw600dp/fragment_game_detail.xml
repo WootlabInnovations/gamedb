@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.GameDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_view_game_cover"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:padding="0dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/screenshot_big" />
+
+            <LinearLayout
+                android:id="@+id/poster_section"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="450dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="170dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/image8" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="65dp"
+                    android:layout_weight="4"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/text_view_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="The Last of Us Part II"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_release_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Aug 12, 2020"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/text_view_rating"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="8.5"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="620dp"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_genre"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                        android:textSize="@dimen/dimen_text_body" />
+
+                    <TextView
+                        android:id="@+id/text_view_genre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Shooter, Stealth"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textSize="@dimen/dimen_text_body" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_platforms"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                        android:textSize="@dimen/dimen_text_body" />
+
+                    <TextView
+                        android:id="@+id/text_view_platforms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" PC, XBox, PS4"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textSize="@dimen/dimen_text_body" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_summary"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <TextView
+                    android:id="@+id/text_view_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_sample_summary"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_storyline"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <TextView
+                    android:id="@+id/text_view_storyline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_sample_storyline"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_videos"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/label_screenshots"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                    android:textSize="@dimen/dimen_text_body" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_screenshot_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+
+</FrameLayout>
