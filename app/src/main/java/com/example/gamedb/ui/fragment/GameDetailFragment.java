@@ -14,11 +14,6 @@ import com.example.gamedb.R;
 import com.example.gamedb.adapter.ScreenshotListAdapter;
 import com.example.gamedb.adapter.VideoListAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameDetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameDetailFragment extends Fragment {
     private RecyclerView mScreenshotRecyclerView;
     private RecyclerView mVideoRecyclerView;

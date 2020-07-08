@@ -16,11 +16,6 @@ import android.view.ViewGroup;
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameListFragment extends Fragment {
     private RecyclerView recyclerView;
     private GameListAdapter mGameListAdapter;
