@@ -12,17 +12,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
+import com.example.gamedb.asynctask.GameListAsyncTask;
 
 public class GameListFragment extends Fragment {
     private RecyclerView recyclerView;
     private GameListAdapter mGameListAdapter;
     private GridLayoutManager gridLayoutManager;
+    private ProgressBar mProgressBar;
     private OnGameListFragmentInteractionListener mListener;
+    private int mPage = 1;
+    private int mPosition;
 
-    public static final String IS_GAME_SELECTED = "IS_GAME_SELECTED";
+    public static final String GAME_ID = "GAME_ID";
 
     public GameListFragment() {
         // Required empty public constructor
@@ -56,10 +61,34 @@ public class GameListFragment extends Fragment {
         mGameListAdapter = new GameListAdapter(mListener);
         recyclerView.setAdapter(mGameListAdapter);
 
+        mProgressBar = view.findViewById(R.id.progress_bar);
+
+        new GameListAsyncTask(mProgressBar, mGameListAdapter).execute(mPage);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                loadMoreGames(recyclerView);
+            }
+        });
+
         return view;
     }
 
+    public void loadMoreGames(RecyclerView recyclerView) {
+        int lastPosition = ((GridLayoutManager) recyclerView.getLayoutManager())
+                .findLastCompletelyVisibleItemPosition();
+        if (lastPosition == mGameListAdapter.getItemCount() - 1) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mPage += 1;
+            mPosition = lastPosition + 1;
+
+            new GameListAsyncTask(mProgressBar, mGameListAdapter).execute(mPage);
+        }
+    }
+
     public interface OnGameListFragmentInteractionListener {
-        void onGameSelected(boolean isGameSelected);
+        void onGameSelected(int gameId);
     }
 }

@@ -2,6 +2,8 @@ package com.example.gamedb.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,25 +13,30 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.gamedb.BuildConfig;
 import com.example.gamedb.R;
 import com.example.gamedb.ui.activity.GameDetailActivity;
 import com.example.gamedb.ui.fragment.GameListFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameListViewHolder> {
-    private int[] mGamesPosters = {
-            R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4,
-            R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8,
-            R.drawable.image9, R.drawable.image10, R.drawable.image11, R.drawable.image12,
-            R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4,
-            R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8,
-            R.drawable.image9, R.drawable.image10, R.drawable.image11, R.drawable.image12
-    };
+    private JSONArray mGames = new JSONArray();
 
     // The fragment's interaction listener is needed to perform actions from the recyclerview
     private GameListFragment.OnGameListFragmentInteractionListener mListener;
 
     public GameListAdapter(GameListFragment.OnGameListFragmentInteractionListener listener) {
         this.mListener = listener;
+    }
+
+    public void setGames(JSONArray games) throws JSONException {
+        for (int i = 0 ; i < games.length(); i++) {
+            mGames.put(games.getJSONObject(i));
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,18 +50,28 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
 
     @Override
     public void onBindViewHolder(@NonNull GameListViewHolder holder, int position) {
-        Glide.with(holder.mContext)
-                .load(mGamesPosters[position])
-                .fitCenter()
-                .into(holder.mImageView);
+        try {
+            JSONObject game = mGames.getJSONObject(position);
+            Uri imageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
+                    .appendPath("t_logo_med")
+                    .appendPath(game.getJSONObject("cover").getString("image_id") + ".jpg")
+                    .build();
+
+            Glide.with(holder.mContext)
+                    .load(imageUri.toString())
+                    .centerCrop()
+                    .into(holder.mImageView);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mGamesPosters.length;
+        return mGames.length();
     }
 
-    public static class GameListViewHolder extends RecyclerView.ViewHolder {
+    public class GameListViewHolder extends RecyclerView.ViewHolder {
         private final Context mContext;
         private final ImageView mImageView;
         private GameListFragment.OnGameListFragmentInteractionListener mListener;
@@ -69,7 +86,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onGameSelected(true);
+                    try {
+                        JSONObject game = mGames.getJSONObject(getAdapterPosition());
+                        mListener.onGameSelected(game.getInt("id"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }

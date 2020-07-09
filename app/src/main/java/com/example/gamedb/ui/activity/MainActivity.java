@@ -25,16 +25,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onGameSelected(boolean isGameSelected) {
+    public void onGameSelected(int gameId) {
         if (findViewById(R.id.fragment_game_detail_container) != null) {
-            GameDetailFragment gameDetailFragment = GameDetailFragment.newInstance(isGameSelected);
+            GameDetailFragment gameDetailFragment = GameDetailFragment.newInstance(gameId);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_game_detail_container, gameDetailFragment)
                     .addToBackStack(null)
                     .commit();
         } else {
             Intent intent = new Intent(this, GameDetailActivity.class);
-            intent.putExtra(GameListFragment.IS_GAME_SELECTED, true);
+            intent.putExtra(GameListFragment.GAME_ID, gameId);
             startActivity(intent);
         }
     }

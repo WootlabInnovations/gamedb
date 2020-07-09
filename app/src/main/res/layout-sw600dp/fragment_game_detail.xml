@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.GameDetailFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -17,10 +23,8 @@
             <ImageView
                 android:id="@+id/image_view_game_cover"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:padding="0dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/screenshot_big" />
+                android:layout_height="480dp"
+                android:padding="0dp" />
 
             <LinearLayout
                 android:id="@+id/poster_section"
@@ -31,19 +35,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/image_view_game_poster"
                     android:layout_width="0dp"
                     android:layout_height="170dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_weight="1"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/image8" />
+                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="65dp"
-                    android:layout_weight="4"
+                    android:layout_marginTop="45dp"
+                    android:layout_weight="5"
                     android:orientation="vertical"
                     android:padding="5dp">
 
@@ -51,22 +54,32 @@
                         android:id="@+id/text_view_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="The Last of Us Part II"
                         android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/text_view_release_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Aug 12, 2020"
                         android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/text_view_rating"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="8.5"
-                        android:textSize="15sp" />
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="16dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_baseline_star_24" />
+
+                        <TextView
+                            android:id="@+id/text_view_rating"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="19"
+                            android:textSize="15sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
@@ -93,7 +106,6 @@
                         android:id="@+id/text_view_genre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Shooter, Stealth"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                         android:textSize="@dimen/dimen_text_body" />
                 </LinearLayout>
@@ -114,7 +126,6 @@
                         android:id="@+id/text_view_platforms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" PC, XBox, PS4"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                         android:textSize="@dimen/dimen_text_body" />
                 </LinearLayout>
@@ -138,7 +149,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/label_sample_summary"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="@dimen/dimen_text_body" />
 
@@ -161,7 +171,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/label_sample_storyline"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="@dimen/dimen_text_body" />
 
@@ -208,4 +217,14 @@
         </FrameLayout>
     </ScrollView>
 
-</FrameLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
