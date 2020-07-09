@@ -47,23 +47,14 @@ public class GameDetailFragment extends Fragment {
         if (arguments != null && arguments.containsKey(GameListFragment.GAME_ID)) {
             mGameId = arguments.getInt(GameListFragment.GAME_ID, -1);
 
-            screenshotLinearLayoutManager = new LinearLayoutManager(getContext(),
-                    LinearLayoutManager.HORIZONTAL, false);
+            /*
+             * TODO: Create the layout managers for screenshot and video.
+             *  Initialize the adapters for both and attach the layout managers and adapters to their
+             *  respective screenshot and video displays.
+             *  Execute the GameDetailAsyncTask passing the view, screenshot and video adapters
+             *  to the GameDetailAsyncTask constructor and the game ID as the execute parameter.
+             */
 
-            mScreenshotListAdapter = new ScreenshotListAdapter();
-            mScreenshotRecyclerView = view.findViewById(R.id.recycler_view_screenshot_list);
-            mScreenshotRecyclerView.setLayoutManager(screenshotLinearLayoutManager);
-            mScreenshotRecyclerView.setAdapter(mScreenshotListAdapter);
-
-            videoLinearLayoutManager = new LinearLayoutManager(getContext(),
-                    LinearLayoutManager.HORIZONTAL, false);
-
-            mVideoListAdapter = new VideoListAdapter();
-            mVideoRecyclerView = view.findViewById(R.id.recycler_view_video_list);
-            mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
-            mVideoRecyclerView.setAdapter(mVideoListAdapter);
-
-            new GameDetailAsyncTask(view, mScreenshotListAdapter, mVideoListAdapter).execute(mGameId);
         }
 
         return view;

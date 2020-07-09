@@ -53,18 +53,15 @@ public class GameListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_game_list_fragment);
+        /*
+         * TODO: Initialize the recyclerview, adapter and layout manager. The layout manager should
+         *  have a span count of 3. Then apply the layout manager and adapter to the recycler view.
+         *  Execute the GameListAsyncTask passing the progress bar and game list adapter to the
+         *  GameListAsyncTask constructor and the current page as the execute parameter.
+         */
 
-        gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        recyclerView.setLayoutManager(gridLayoutManager);
 
-        mGameListAdapter = new GameListAdapter(mListener);
-        recyclerView.setAdapter(mGameListAdapter);
-
-        mProgressBar = view.findViewById(R.id.progress_bar);
-
-        new GameListAsyncTask(mProgressBar, mGameListAdapter).execute(mPage);
-
+        // Load more games when you scroll to the button of the screen
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {

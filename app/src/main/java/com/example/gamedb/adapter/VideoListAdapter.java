@@ -36,7 +36,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_list_item,
                 parent, false);
 
-        return new VideoListViewModel(view);
+        /*TODO: Return a VideoListViewModel object*/
+        return null;
     }
 
     @Override
@@ -48,10 +49,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                     .appendPath("0")
                     .build();
 
-            Glide.with(holder.mContext)
-                    .load(youtubeUri.toString() + ".jpg")
-                    .fitCenter()
-                    .into(holder.mImageView);
+            /*TODO: Put the images into Glide*/
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,16 +79,11 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                         Uri youtubeUri = Uri.parse(BuildConfig.YOUTUBE_WATCH_URL).buildUpon()
                                 .appendPath(video.getString("video_id"))
                                 .build();
-                        Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);
-
-                        // Check if an app exists on the phone such as the YouTube app to show the
-                        // selected video
-                        if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                            mContext.startActivity(intent);
-                        } else {
-                            Toast.makeText(mContext, "No app available to play videos",
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        /*
+                        * TODO: Create an implicit intent that opens videos in the YouTube app or
+                        *  web browser. Ensure to check if the phone has an app that can play the
+                        *   video. Display a Toast if it doesn't.
+                        * */
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

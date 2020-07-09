@@ -53,17 +53,13 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     @Override
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
-        mProgressBar.get().setVisibility(View.VISIBLE);
+        // TODO: Display the progress bar to show users that data is loading from the remote server
     }
 
     @Override
     protected void onPostExecute(JSONArray jsonArray) {
         super.onPostExecute(jsonArray);
-        try {
-            mGameListAdapter.get().setGames(jsonArray);
-            mProgressBar.get().setVisibility(View.GONE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // TODO: Remove the progress bar from view and set the returned data into the
+        //  GameListAdapter
     }
 }

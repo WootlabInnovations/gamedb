@@ -55,7 +55,7 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     @Override
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
-        mProgressBar.get().setVisibility(View.VISIBLE);
+        // TODO: Display the progress bar to show users that data is loading from the remote server
     }
 
     @Override
@@ -63,6 +63,7 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
         super.onPostExecute(jsonArray);
         mProgressBar.get().setVisibility(View.GONE);
 
+        // TODO: Set the response data into the view. Some views have been done for you.
         try {
             JSONObject game = jsonArray.getJSONObject(0);
 
@@ -89,7 +90,7 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
             Glide.with(mView.get())
                     .load(posterImageUri.toString())
                     .fitCenter()
-                    .into((ImageView) mView.get().findViewById(R.id.image_view_game_poster));
+                    .into(/*TODO: enter the image view*/);
 
             // Game name, release date and rating
             TextView nameTextView = mView.get().findViewById(R.id.text_view_name);
@@ -130,21 +131,10 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
             // Platforms
             TextView platformsTextView = mView.get().findViewById(R.id.text_view_platforms);
             StringBuilder platforms = new StringBuilder();
-            for (int i = 0; i < game.getJSONArray("platforms").length(); i++) {
-                if (i == 0 && i != game.getJSONArray("platforms").length() - 1) {
-                    platforms.append(" ")
-                            .append(game.getJSONArray("platforms").getJSONObject(i)
-                            .getString("name"))
-                            .append(", ");
-                } else if (i == game.getJSONArray("platforms").length() - 1) {
-                    platforms.append(game.getJSONArray("platforms").getJSONObject(i)
-                            .getString("name"));
-                } else {
-                    platforms.append(game.getJSONArray("platforms").getJSONObject(i)
-                            .getString("name"))
-                            .append(", ");
-                }
-            }
+            /*
+             * TODO: Use genre as an example.
+             *  Access the platforms array like `game.getJSONArray("platforms").
+             */
             platformsTextView.setText(platforms.toString());
 
             // Summary
@@ -158,10 +148,10 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
             }
 
             // Videos
-            mVideoListAdapter.get().setVideos(videoArray);
+            /* TODO: Set the video array data into the video list adapter */
 
             // Screenshots
-            mScreenshotListAdapter.get().setScreenshots(screenshotArray);
+            /* TODO: Set the screenshot array data into the screenshot list adapter */
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -18,12 +18,11 @@ public class GameDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // TODO: Attach the GameDetailFragment to the Activity. Also ensure the pass the game ID
+        //  to the GameDetailFragment instance.
         Intent intent = getIntent();
         if (intent.hasExtra(GAME_ID)) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_game_detail_container, GameDetailFragment.newInstance(
-                            intent.getIntExtra(GAME_ID, -1)))
-                    .commit();
+
         }
     }
 }

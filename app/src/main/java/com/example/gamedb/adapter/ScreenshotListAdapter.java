@@ -24,7 +24,7 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
 
     public void setScreenshots(JSONArray screenshots) {
         mScreenshots = screenshots;
-        notifyDataSetChanged();
+        /*TODO: Notify adapter that data has been set or updated*/
     }
 
     @NonNull
@@ -33,7 +33,8 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.screenshot_list_item,
                 parent, false);
 
-        return new ScreenshotViewHolder(view);
+        /*TODO: Return a ScreenshotViewHolder object*/
+        return null;
     }
 
     @Override
@@ -45,10 +46,8 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
                     .appendPath(screenshot.getString("image_id") + ".jpg")
                     .build();
 
-            Glide.with(holder.mContext)
-                    .load(imageUri.toString())
-                    .centerCrop()
-                    .into(holder.mImageView);
+            /*TODO: Put the images into Glide*/
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
