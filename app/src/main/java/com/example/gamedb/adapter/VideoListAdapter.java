@@ -82,15 +82,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                                 .appendPath(video.getString("video_id"))
                                 .build();
                         Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);
-
-                        // Check if an app exists on the phone such as the YouTube app to show the
-                        // selected video
-                        if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-                            mContext.startActivity(intent);
-                        } else {
-                            Toast.makeText(mContext, "No app available to play videos",
-                                    Toast.LENGTH_LONG).show();
-                        }
+                        mContext.startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
