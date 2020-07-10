@@ -62,6 +62,7 @@ public class GameListFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Instantiate the loader manager
         mLoaderManager = LoaderManager.getInstance(this);
     }
 
@@ -80,6 +81,7 @@ public class GameListFragment extends Fragment implements LoaderManager.LoaderCa
 
         mProgressBar = view.findViewById(R.id.progress_bar);
 
+        // Pass the page number as a bundle to the loader
         Bundle bundle = new Bundle();
         bundle.putInt(PAGE, mPage);
         mLoaderManager.restartLoader(LOADER_ID, bundle, this);
@@ -117,12 +119,10 @@ public class GameListFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(@NonNull Loader<JSONArray> loader, JSONArray data) {
-        try {
-            mGameListAdapter.setGames(data);
-            mProgressBar.setVisibility(View.GONE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        /*
+         * TODO: Implement what happens after the loader finishes execution.
+         *  Hint: Take a look at the onPostExecute method of your AsyncTask
+         */
     }
 
     @Override
