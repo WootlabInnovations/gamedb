@@ -5,7 +5,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,8 +20,12 @@ import android.widget.ProgressBar;
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
 import com.example.gamedb.asynctask.GameListAsyncTask;
+import com.example.gamedb.loader.GameListAsyncTaskLoader;
 
-public class GameListFragment extends Fragment {
+import org.json.JSONArray;
+import org.json.JSONException;
+
+public class GameListFragment extends Fragment implements LoaderManager.LoaderCallbacks<JSONArray> {
     private RecyclerView recyclerView;
     private GameListAdapter mGameListAdapter;
     private GridLayoutManager gridLayoutManager;
@@ -26,8 +33,12 @@ public class GameListFragment extends Fragment {
     private OnGameListFragmentInteractionListener mListener;
     private int mPage = 1;
     private int mPosition;
+    private LoaderManager mLoaderManager;
+
+    private final int LOADER_ID = 1;
 
     public static final String GAME_ID = "GAME_ID";
+    public static final String PAGE = GameListFragment.class.getName() + "_PAGE";
 
     public GameListFragment() {
         // Required empty public constructor
@@ -49,11 +60,17 @@ public class GameListFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mLoaderManager = LoaderManager.getInstance(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_game_list_fragment);
+        recyclerView = view.findViewById(R.id.recycler_view_game_list_fragment);
 
         gridLayoutManager = new GridLayoutManager(getContext(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -63,7 +80,9 @@ public class GameListFragment extends Fragment {
 
         mProgressBar = view.findViewById(R.id.progress_bar);
 
-        new GameListAsyncTask(mProgressBar, mGameListAdapter).execute(mPage);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PAGE, mPage);
+        mLoaderManager.restartLoader(LOADER_ID, bundle, this);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -84,8 +103,31 @@ public class GameListFragment extends Fragment {
             mPage += 1;
             mPosition = lastPosition + 1;
 
-            new GameListAsyncTask(mProgressBar, mGameListAdapter).execute(mPage);
+            Bundle bundle = new Bundle();
+            bundle.putInt(PAGE, mPage);
+            mLoaderManager.restartLoader(LOADER_ID, bundle, this);
         }
+    }
+
+    @NonNull
+    @Override
+    public Loader<JSONArray> onCreateLoader(int id, @Nullable Bundle args) {
+        return new GameListAsyncTaskLoader(getContext(), args.getInt(PAGE));
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<JSONArray> loader, JSONArray data) {
+        try {
+            mGameListAdapter.setGames(data);
+            mProgressBar.setVisibility(View.GONE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<JSONArray> loader) {
+
     }
 
     public interface OnGameListFragmentInteractionListener {
