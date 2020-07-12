@@ -81,126 +81,23 @@ public class GameDetailFragment extends Fragment {
             mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
             mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
-            mViewModel = new ViewModelProvider(requireActivity()).get(GameDetailViewModel.class);
-            mViewModel.loadGame(mGameId);
-            mViewModel.getGame().observe(this, new Observer<JSONArray>() {
-                @Override
-                public void onChanged(JSONArray jsonArray) {
-                    if (jsonArray == null) {
-                        mProgressBar.setVisibility(View.VISIBLE);
-                    } else {
-                        mProgressBar.setVisibility(View.GONE);
-                        displayGameDetail(jsonArray);
-                    }
-                }
-            });
+            /*
+             * TODO: Initialize the view model, fetch the game detail from the remote server and
+             *  observe the view model for changes (i.e. when the remote server has downloaded the
+             *  game.
+             *  Remember to set the game list adapter when the view model observes changes
+             */
+            // ...
         }
 
         return mView;
     }
 
     private void displayGameDetail(JSONArray jsonArray) {
-        try {
-            JSONObject game = jsonArray.getJSONObject(0);
-
-            JSONArray screenshotArray = game.getJSONArray("screenshots");
-            JSONArray videoArray = game.getJSONArray("videos");
-
-            // Background Image
-            JSONObject backgroundImage = screenshotArray.getJSONObject(0);
-            Uri backgroundImageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
-                    .appendPath("t_screenshot_big")
-                    .appendPath(backgroundImage.getString("image_id") + ".jpg")
-                    .build();
-            Glide.with(mView)
-                    .load(backgroundImageUri.toString())
-                    .fitCenter()
-                    .into((ImageView) mView.findViewById(R.id.image_view_game_cover));
-
-            // Poster Image
-            JSONObject posterImage = game.getJSONObject("cover");
-            Uri posterImageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
-                    .appendPath("t_logo_med")
-                    .appendPath(posterImage.getString("image_id") + ".jpg")
-                    .build();
-            Glide.with(mView)
-                    .load(posterImageUri.toString())
-                    .fitCenter()
-                    .into((ImageView) mView.findViewById(R.id.image_view_game_poster));
-
-            // Game name, release date and rating
-            TextView nameTextView = mView.findViewById(R.id.text_view_name);
-            nameTextView.setText(game.getString("name"));
-
-            TextView releaseDateTextView = mView.findViewById(R.id.text_view_release_date);
-            try {
-                releaseDateTextView.setText(Utilities.convertTimestampToDate(game.getString(
-                        "first_release_date")));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            TextView ratingTextView = mView.findViewById(R.id.text_view_rating);
-            ratingTextView.setText(String.valueOf(Utilities.convertDoubleToInteger(game.getString(
-                    "total_rating"))));
-
-            // Genre
-            TextView genreTextView = mView.findViewById(R.id.text_view_genre);
-            StringBuilder genres = new StringBuilder();
-            for (int i = 0; i < game.getJSONArray("genres").length(); i++) {
-                if (i == 0 && i != game.getJSONArray("genres").length() - 1) {
-                    genres.append(" ")
-                            .append(game.getJSONArray("genres").getJSONObject(i)
-                                    .getString("name"))
-                            .append(", ");
-                } else if (i == game.getJSONArray("genres").length() - 1) {
-                    genres.append(game.getJSONArray("genres").getJSONObject(i)
-                            .getString("name"));
-                } else {
-                    genres.append(game.getJSONArray("genres").getJSONObject(i)
-                            .getString("name"))
-                            .append(", ");
-                }
-            }
-            genreTextView.setText(genres.toString());
-
-            // Platforms
-            TextView platformsTextView = mView.findViewById(R.id.text_view_platforms);
-            StringBuilder platforms = new StringBuilder();
-            for (int i = 0; i < game.getJSONArray("platforms").length(); i++) {
-                if (i == 0 && i != game.getJSONArray("platforms").length() - 1) {
-                    platforms.append(" ")
-                            .append(game.getJSONArray("platforms").getJSONObject(i)
-                                    .getString("name"))
-                            .append(", ");
-                } else if (i == game.getJSONArray("platforms").length() - 1) {
-                    platforms.append(game.getJSONArray("platforms").getJSONObject(i)
-                            .getString("name"));
-                } else {
-                    platforms.append(game.getJSONArray("platforms").getJSONObject(i)
-                            .getString("name"))
-                            .append(", ");
-                }
-            }
-            platformsTextView.setText(platforms.toString());
-
-            // Summary
-            TextView summaryTextView = mView.findViewById(R.id.text_view_summary);
-            summaryTextView.setText(game.getString("summary"));
-
-            // Storyline
-            TextView storylineTextView = mView.findViewById(R.id.text_view_storyline);
-            if (game.has("storyline")) {
-                storylineTextView.setText(game.getString("storyline"));
-            }
-
-            // Videos
-            mVideoListAdapter.setVideos(videoArray);
-
-            // Screenshots
-            mScreenshotListAdapter.setScreenshots(screenshotArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        /*
+         * TODO: Display the returned game detail in the view.
+         *  This is a helper method to display the game details in the view. You should call this
+         *  method from the view model observer in the onCreateView method.
+         */
     }
 }

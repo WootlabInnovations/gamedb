@@ -66,27 +66,13 @@ public class GameListFragment extends Fragment {
 
         mProgressBar = view.findViewById(R.id.progress_bar);
 
-        mViewModel = new ViewModelProvider(requireActivity()).get(GameListViewModel.class);
-        mViewModel.loadGames(mPage);
-        mViewModel.getGames().observe(this, new Observer<JSONArray>() {
-            @Override
-            public void onChanged(JSONArray jsonArray) {
-                if (jsonArray == null) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                } else {
-                    mProgressBar.setVisibility(View.GONE);
-                    if (mPage == 1) {
-                        mGameListAdapter.setGames(jsonArray);
-                    } else {
-                        try {
-                            mGameListAdapter.addMoreGames(jsonArray);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });
+        /*
+         * TODO: Initialize the view model, fetch the list of games from the remote server and
+         *  observe the view model for changes (i.e. when the remote server has downloaded the list
+         *  of games.
+         *  Remember to set the game list adapter when the view model observes changes
+         */
+        // ...
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

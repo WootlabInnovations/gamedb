@@ -13,10 +13,11 @@ public class GameDetailViewModel extends ViewModel {
     public GameDetailViewModel() { }
 
     public MutableLiveData<JSONArray> getGame() {
-        return game;
+        // TODO: Return the Game MutableLiveData
+        return null;
     }
 
     public void loadGame(int id) {
-        new GameDetailAsyncTask(game).execute(id);
+        // TODO: Make a async call to the remote server to get the game detail
     }
 }

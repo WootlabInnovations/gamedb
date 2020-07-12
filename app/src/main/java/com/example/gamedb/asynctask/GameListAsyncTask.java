@@ -47,6 +47,6 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     @Override
     protected void onPostExecute(JSONArray jsonArray) {
         super.onPostExecute(jsonArray);
-        mGames.setValue(jsonArray);
+        // TODO: Set the MutableLiveData (mGames) with the JSONArray response.
     }
 }
