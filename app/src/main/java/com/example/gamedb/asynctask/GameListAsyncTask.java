@@ -2,29 +2,23 @@ package com.example.gamedb.asynctask;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.ProgressBar;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.gamedb.BuildConfig;
-import com.example.gamedb.adapter.GameListAdapter;
 import com.example.gamedb.util.Utilities;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.lang.ref.WeakReference;
 
 public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
-    private WeakReference<ProgressBar> mProgressBar;
-    private WeakReference<GameListAdapter> mGameListAdapter;
     private int mLimit = 24;
     private int mOffset = 0;
+    private MutableLiveData<JSONArray> mGames;
 
     private static final String LOG_TAG = GameListAsyncTask.class.getName();
 
-    public GameListAsyncTask(ProgressBar progressBar, GameListAdapter gameListAdapter) {
-        mProgressBar = new WeakReference<>(progressBar);
-        mGameListAdapter = new WeakReference<>(gameListAdapter);
+    public GameListAsyncTask(MutableLiveData<JSONArray> games) {
+        mGames = games;
     }
 
     @Override
@@ -51,19 +45,8 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-        mProgressBar.get().setVisibility(View.VISIBLE);
-    }
-
-    @Override
     protected void onPostExecute(JSONArray jsonArray) {
         super.onPostExecute(jsonArray);
-        try {
-            mGameListAdapter.get().setGames(jsonArray);
-            mProgressBar.get().setVisibility(View.GONE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        mGames.setValue(jsonArray);
     }
 }

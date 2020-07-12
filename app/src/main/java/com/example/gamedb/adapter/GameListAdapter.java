@@ -32,7 +32,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
         this.mListener = listener;
     }
 
-    public void setGames(JSONArray games) throws JSONException {
+    public void setGames(JSONArray games) {
+        mGames = games;
+    }
+
+    public void addMoreGames(JSONArray games) throws JSONException {
         for (int i = 0 ; i < games.length(); i++) {
             mGames.put(games.getJSONObject(i));
         }

@@ -2,15 +2,6 @@ package com.example.gamedb.ui.fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +9,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.gamedb.BuildConfig;
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.ScreenshotListAdapter;
 import com.example.gamedb.adapter.VideoListAdapter;
-import com.example.gamedb.asynctask.GameDetailAsyncTask;
-import com.example.gamedb.loader.GameDetailAsyncTaskLoader;
 import com.example.gamedb.util.Utilities;
+import com.example.gamedb.viewmodel.GameDetailViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,18 +29,17 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 
-public class GameDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<JSONArray> {
+public class GameDetailFragment extends Fragment {
     private RecyclerView mScreenshotRecyclerView;
     private RecyclerView mVideoRecyclerView;
     private ScreenshotListAdapter mScreenshotListAdapter;
     private VideoListAdapter mVideoListAdapter;
     private LinearLayoutManager screenshotLinearLayoutManager;
     private LinearLayoutManager videoLinearLayoutManager;
-    private LoaderManager mLoaderManager;
     private ProgressBar mProgressBar;
     private View mView;
     private int mGameId;
-    private int LOADER_ID = 2;
+    private GameDetailViewModel mViewModel;
 
     public GameDetailFragment() {
         // Required empty public constructor
@@ -57,13 +52,6 @@ public class GameDetailFragment extends Fragment implements LoaderManager.Loader
         gameDetailFragment.setArguments(arguments);
 
         return gameDetailFragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mLoaderManager = LoaderManager.getInstance(this);
-
     }
 
     @Override
@@ -93,24 +81,27 @@ public class GameDetailFragment extends Fragment implements LoaderManager.Loader
             mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
             mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
-            mLoaderManager.restartLoader(LOADER_ID, null, this);
+            mViewModel = new ViewModelProvider(requireActivity()).get(GameDetailViewModel.class);
+            mViewModel.loadGame(mGameId);
+            mViewModel.getGame().observe(this, new Observer<JSONArray>() {
+                @Override
+                public void onChanged(JSONArray jsonArray) {
+                    if (jsonArray == null) {
+                        mProgressBar.setVisibility(View.VISIBLE);
+                    } else {
+                        mProgressBar.setVisibility(View.GONE);
+                        displayGameDetail(jsonArray);
+                    }
+                }
+            });
         }
 
         return mView;
     }
 
-    @NonNull
-    @Override
-    public Loader<JSONArray> onCreateLoader(int id, @Nullable Bundle args) {
-        return new GameDetailAsyncTaskLoader(getContext(), mGameId);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<JSONArray> loader, JSONArray data) {
-        mProgressBar.setVisibility(View.GONE);
-
+    private void displayGameDetail(JSONArray jsonArray) {
         try {
-            JSONObject game = data.getJSONObject(0);
+            JSONObject game = jsonArray.getJSONObject(0);
 
             JSONArray screenshotArray = game.getJSONArray("screenshots");
             JSONArray videoArray = game.getJSONArray("videos");
@@ -211,10 +202,5 @@ public class GameDetailFragment extends Fragment implements LoaderManager.Loader
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<JSONArray> loader) {
-
     }
 }
