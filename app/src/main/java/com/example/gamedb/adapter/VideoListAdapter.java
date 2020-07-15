@@ -75,11 +75,10 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_video_list_item);
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            mYoutubeImageUrl =  preferences.getString(mContext.getResources().getString(
-                    R.string.youtube_image_url), "");
-            mYoutubeWatchUrl = preferences.getString(mContext.getResources().getString(
-                    R.string.youtube_watch_url), "");
+            // TODO: Get the youtube image and video url from SharedPreference
+            SharedPreferences preferences = null;
+            mYoutubeImageUrl =  "";
+            mYoutubeWatchUrl = "";
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

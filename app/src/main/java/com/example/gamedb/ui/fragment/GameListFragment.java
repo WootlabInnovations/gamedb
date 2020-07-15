@@ -68,12 +68,12 @@ public class GameListFragment extends Fragment {
         mUserKey = mPreference.getString(getResources().getString(R.string.user_key), "");
         mIgdbBaseUrl = mPreference.getString(getResources().getString(R.string.igdb_base_url),
                 "");
-        String igdbImageUrl = mPreference.getString(getResources().getString(R.string.igdb_image_url),
-                "");
-        String youtubeImageUrl = mPreference.getString(getResources().getString(
-                R.string.youtube_image_url), "");
-        String youtubeVideoUrl = mPreference.getString(getResources().getString(
-                R.string.youtube_watch_url), "");
+        // TODO: Get the image url from sharedpreference.
+        String igdbImageUrl = "";
+        // TODO: Get the youtube image url from sharedpreference.
+        String youtubeImageUrl = "";
+        // TODO: Get the image video from sharedpreference.
+        String youtubeVideoUrl = "";
 
         if (mUserKey.equals("") || mIgdbBaseUrl.equals("") || igdbImageUrl.equals("") ||
                 youtubeImageUrl.equals("") || youtubeVideoUrl.equals("")) {

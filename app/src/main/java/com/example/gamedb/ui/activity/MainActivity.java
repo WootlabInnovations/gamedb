@@ -35,11 +35,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        /*
+         * TODO: Create an intent that opens the Settings Activity when Settings is clicked
+         *  on the menu.
+         */
 
         return super.onOptionsItemSelected(item);
     }

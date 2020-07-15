@@ -70,9 +70,10 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
             super(itemView);
             mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_screenshot_list_item);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            mIgdbImageUrl = preferences.getString(mContext.getResources().getString(
-                    R.string.igdb_image_url), "");
+
+            // TODO: Get the image url from SharedPreference
+            SharedPreferences preferences = null;
+            mIgdbImageUrl = "";
         }
     }
 }

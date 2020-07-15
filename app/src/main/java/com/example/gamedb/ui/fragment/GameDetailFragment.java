@@ -85,12 +85,14 @@ public class GameDetailFragment extends Fragment {
             mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
             mViewModel = new ViewModelProvider(requireActivity()).get(GameDetailViewModel.class);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
-                    requireContext());
-            String userKey = preferences.getString(getResources().getString(R.string.user_key), "");
-            String igdbBaseUrl = preferences.getString(getResources().getString(R.string.igdb_base_url), "");
-            mIgdbImageUrl = preferences.getString(getResources().getString(R.string.igdb_image_url), "");
+
+            // TODO: Get the user key, base url and image url from SharedPreference
+            SharedPreferences preferences = null;
+            String userKey = "";
+            String igdbBaseUrl = "";
+            mIgdbImageUrl = "";
             mViewModel.loadGame(mGameId, userKey, igdbBaseUrl);
+
             mViewModel.getGame().observe(getViewLifecycleOwner(), new Observer<JSONArray>() {
                 @Override
                 public void onChanged(JSONArray jsonArray) {

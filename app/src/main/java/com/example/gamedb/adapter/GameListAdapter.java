@@ -89,9 +89,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
             this.mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_game_list_item);
             mListener = listener;
-            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
-            mIgdbImageUrl = preference.getString(mContext.getResources().getString(
-                    R.string.igdb_image_url), "");
+
+            // TODO: Get the image url from SharedPreference
+            SharedPreferences preference = null;
+            mIgdbImageUrl = "";
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
