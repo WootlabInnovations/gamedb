@@ -2,6 +2,7 @@ package com.example.gamedb.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -56,7 +58,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
     public void onBindViewHolder(@NonNull GameListViewHolder holder, int position) {
         try {
             JSONObject game = mGames.getJSONObject(position);
-            Uri imageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
+            Uri imageUri = Uri.parse(holder.mIgdbImageUrl).buildUpon()
                     .appendPath("t_logo_med")
                     .appendPath(game.getJSONObject("cover").getString("image_id") + ".jpg")
                     .build();
@@ -79,6 +81,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
         private final Context mContext;
         private final ImageView mImageView;
         private GameListFragment.OnGameListFragmentInteractionListener mListener;
+        private final String mIgdbImageUrl;
 
         public GameListViewHolder(@NonNull final View itemView,
                                   GameListFragment.OnGameListFragmentInteractionListener listener) {
@@ -86,6 +89,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.GameLi
             this.mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_game_list_item);
             mListener = listener;
+            SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
+            mIgdbImageUrl = preference.getString(mContext.getResources().getString(
+                    R.string.igdb_image_url), "");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

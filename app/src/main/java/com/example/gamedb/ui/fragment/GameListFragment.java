@@ -1,21 +1,27 @@
 package com.example.gamedb.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
+import com.example.gamedb.ui.activity.SettingsActivity;
 import com.example.gamedb.viewmodel.GameListViewModel;
 
 import org.json.JSONArray;
@@ -29,6 +35,9 @@ public class GameListFragment extends Fragment {
     private OnGameListFragmentInteractionListener mListener;
     private int mPage = 1;
     private GameListViewModel mViewModel;
+    private SharedPreferences mPreference;
+    private String mUserKey;
+    private String mIgdbBaseUrl;
 
     public static final String GAME_ID = "com.example.gamedb.GAME_ID";
 
@@ -52,6 +61,27 @@ public class GameListFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mPreference = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        mUserKey = mPreference.getString(getResources().getString(R.string.user_key), "");
+        mIgdbBaseUrl = mPreference.getString(getResources().getString(R.string.igdb_base_url),
+                "");
+        String igdbImageUrl = mPreference.getString(getResources().getString(R.string.igdb_image_url),
+                "");
+        String youtubeImageUrl = mPreference.getString(getResources().getString(
+                R.string.youtube_image_url), "");
+        String youtubeVideoUrl = mPreference.getString(getResources().getString(
+                R.string.youtube_watch_url), "");
+
+        if (mUserKey.equals("") || mIgdbBaseUrl.equals("") || igdbImageUrl.equals("") ||
+                youtubeImageUrl.equals("") || youtubeVideoUrl.equals("")) {
+            mListener.onNoSettingsProvided("Complete all settings fields.");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_list, container, false);
@@ -67,8 +97,8 @@ public class GameListFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.progress_bar);
 
         mViewModel = new ViewModelProvider(requireActivity()).get(GameListViewModel.class);
-        mViewModel.loadGames(mPage);
-        mViewModel.getGames().observe(this, new Observer<JSONArray>() {
+        mViewModel.loadGames(mPage, mUserKey, mIgdbBaseUrl);
+        mViewModel.getGames().observe(getViewLifecycleOwner(), new Observer<JSONArray>() {
             @Override
             public void onChanged(JSONArray jsonArray) {
                 if (jsonArray == null) {
@@ -106,11 +136,12 @@ public class GameListFragment extends Fragment {
             mProgressBar.setVisibility(View.VISIBLE);
             mPage += 1;
 
-            mViewModel.loadGames(mPage);
+            mViewModel.loadGames(mPage, mUserKey, mIgdbBaseUrl);
         }
     }
 
     public interface OnGameListFragmentInteractionListener {
         void onGameSelected(int gameId);
+        void onNoSettingsProvided(String message);
     }
 }

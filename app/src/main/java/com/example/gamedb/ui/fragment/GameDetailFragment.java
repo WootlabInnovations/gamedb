@@ -1,5 +1,6 @@
 package com.example.gamedb.ui.fragment;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +42,7 @@ public class GameDetailFragment extends Fragment {
     private View mView;
     private int mGameId;
     private GameDetailViewModel mViewModel;
+    private String mIgdbImageUrl;
 
     public GameDetailFragment() {
         // Required empty public constructor
@@ -82,8 +85,13 @@ public class GameDetailFragment extends Fragment {
             mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
             mViewModel = new ViewModelProvider(requireActivity()).get(GameDetailViewModel.class);
-            mViewModel.loadGame(mGameId);
-            mViewModel.getGame().observe(this, new Observer<JSONArray>() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(
+                    requireContext());
+            String userKey = preferences.getString(getResources().getString(R.string.user_key), "");
+            String igdbBaseUrl = preferences.getString(getResources().getString(R.string.igdb_base_url), "");
+            mIgdbImageUrl = preferences.getString(getResources().getString(R.string.igdb_image_url), "");
+            mViewModel.loadGame(mGameId, userKey, igdbBaseUrl);
+            mViewModel.getGame().observe(getViewLifecycleOwner(), new Observer<JSONArray>() {
                 @Override
                 public void onChanged(JSONArray jsonArray) {
                     if (jsonArray == null) {
@@ -108,7 +116,7 @@ public class GameDetailFragment extends Fragment {
 
             // Background Image
             JSONObject backgroundImage = screenshotArray.getJSONObject(0);
-            Uri backgroundImageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
+            Uri backgroundImageUri = Uri.parse(mIgdbImageUrl).buildUpon()
                     .appendPath("t_screenshot_big")
                     .appendPath(backgroundImage.getString("image_id") + ".jpg")
                     .build();
@@ -119,7 +127,7 @@ public class GameDetailFragment extends Fragment {
 
             // Poster Image
             JSONObject posterImage = game.getJSONObject("cover");
-            Uri posterImageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
+            Uri posterImageUri = Uri.parse(mIgdbImageUrl).buildUpon()
                     .appendPath("t_logo_med")
                     .appendPath(posterImage.getString("image_id") + ".jpg")
                     .build();

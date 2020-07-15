@@ -16,7 +16,7 @@ public class GameDetailViewModel extends ViewModel {
         return game;
     }
 
-    public void loadGame(int id) {
-        new GameDetailAsyncTask(game).execute(id);
+    public void loadGame(int id, String userKey, String igdbBaseUrl) {
+        new GameDetailAsyncTask(game, userKey, igdbBaseUrl).execute(id);
     }
 }

@@ -12,15 +12,19 @@ import org.json.JSONArray;
 
 public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     private MutableLiveData<JSONArray> mGame;
+    private String mUserKey;
+    private String mIgdbBaseUrl;
 
-    public GameDetailAsyncTask(MutableLiveData<JSONArray> game) {
+    public GameDetailAsyncTask(MutableLiveData<JSONArray> game, String userKey, String igdbBaseUrl) {
         mGame = game;
+        mUserKey = userKey;
+        mIgdbBaseUrl = igdbBaseUrl;
     }
 
     @Override
     protected JSONArray doInBackground(Integer... integers) {
         int gameId = integers[0];
-        Uri uri = Uri.parse(BuildConfig.IGDB_BASE_URL).buildUpon()
+        Uri uri = Uri.parse(mIgdbBaseUrl).buildUpon()
                 .appendPath("games")
                 .build();
 
@@ -29,7 +33,7 @@ public class GameDetailAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                 "summary,total_rating,total_rating_count,videos.*;" +
                 "where platforms.category = 1 & id = " + gameId + ";";
 
-        return (JSONArray) Utilities.httpRequest("POST", body, uri);
+        return (JSONArray) Utilities.httpRequest("POST", body, uri, mUserKey);
     }
 
     @Override

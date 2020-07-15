@@ -1,5 +1,6 @@
 package com.example.gamedb.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.gamedb.adapter.GameListAdapter;
 import com.example.gamedb.R;
@@ -25,6 +28,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onGameSelected(int gameId) {
         if (findViewById(R.id.fragment_game_detail_container) != null) {
             GameDetailFragment gameDetailFragment = GameDetailFragment.newInstance(gameId);
@@ -37,5 +57,12 @@ public class MainActivity extends AppCompatActivity implements
             intent.putExtra(GameListFragment.GAME_ID, gameId);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onNoSettingsProvided(String message) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra(SettingsActivity.SETTING_INTENT, message);
+        startActivity(intent);
     }
 }

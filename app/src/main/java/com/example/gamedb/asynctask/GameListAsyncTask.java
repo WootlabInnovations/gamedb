@@ -14,11 +14,15 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
     private int mLimit = 24;
     private int mOffset = 0;
     private MutableLiveData<JSONArray> mGames;
+    private String mUserKey;
+    private String mIgdbBaseUrl;
 
     private static final String LOG_TAG = GameListAsyncTask.class.getName();
 
-    public GameListAsyncTask(MutableLiveData<JSONArray> games) {
+    public GameListAsyncTask(MutableLiveData<JSONArray> games, String userKey, String igdbBaseUrl) {
         mGames = games;
+        mUserKey = userKey;
+        mIgdbBaseUrl = igdbBaseUrl;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
             mOffset = (page - 1) * mLimit;
         }
 
-        Uri uri = Uri.parse(BuildConfig.IGDB_BASE_URL).buildUpon()
+        Uri uri = Uri.parse(mIgdbBaseUrl).buildUpon()
                 .appendPath("games")
                 .build();
 
@@ -41,7 +45,7 @@ public class GameListAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                 "limit " + mLimit + ";" +
                 "offset " + mOffset + ";";
 
-        return (JSONArray) Utilities.httpRequest("POST", body, uri);
+        return (JSONArray) Utilities.httpRequest("POST", body, uri, mUserKey);
     }
 
     @Override

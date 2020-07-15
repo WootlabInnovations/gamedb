@@ -12,8 +12,13 @@
         android:roundIcon="@mipmap/ic_game_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.GameDetailActivity"
-            android:parentActivityName=".ui.activity.MainActivity"></activity>
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".ui.activity.GameDetailActivity"
+            android:parentActivityName=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

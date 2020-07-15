@@ -1,6 +1,7 @@
 package com.example.gamedb.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,7 +42,7 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
     public void onBindViewHolder(@NonNull ScreenshotViewHolder holder, int position) {
         try {
             JSONObject screenshot = mScreenshots.getJSONObject(position);
-            Uri imageUri = Uri.parse(BuildConfig.IGDB_IMAGE_URL).buildUpon()
+            Uri imageUri = Uri.parse(holder.mIgdbImageUrl).buildUpon()
                     .appendPath("t_screenshot_med")
                     .appendPath(screenshot.getString("image_id") + ".jpg")
                     .build();
@@ -62,11 +64,15 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
     public static class ScreenshotViewHolder extends RecyclerView.ViewHolder {
         private final Context mContext;
         private final ImageView mImageView;
+        private final String mIgdbImageUrl;
 
         public ScreenshotViewHolder(@NonNull View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_screenshot_list_item);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            mIgdbImageUrl = preferences.getString(mContext.getResources().getString(
+                    R.string.igdb_image_url), "");
         }
     }
 }

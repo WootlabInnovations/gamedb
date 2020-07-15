@@ -2,6 +2,7 @@ package com.example.gamedb.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,7 +45,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     public void onBindViewHolder(@NonNull VideoListViewModel holder, int position) {
         try {
             JSONObject video = mVideos.getJSONObject(position);
-            Uri youtubeUri = Uri.parse(BuildConfig.YOUTUBE_IMAGE_URL).buildUpon()
+            Uri youtubeUri = Uri.parse(holder.mYoutubeImageUrl).buildUpon()
                     .appendPath(video.getString("video_id"))
                     .appendPath("0")
                     .build();
@@ -65,11 +67,19 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     public class VideoListViewModel extends RecyclerView.ViewHolder {
         private final Context mContext;
         private final ImageView mImageView;
+        private final String mYoutubeWatchUrl;
+        private final String mYoutubeImageUrl;
 
         public VideoListViewModel(@NonNull View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             mImageView = itemView.findViewById(R.id.image_view_video_list_item);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+            mYoutubeImageUrl =  preferences.getString(mContext.getResources().getString(
+                    R.string.youtube_image_url), "");
+            mYoutubeWatchUrl = preferences.getString(mContext.getResources().getString(
+                    R.string.youtube_watch_url), "");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -78,7 +88,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                         JSONObject video = mVideos.getJSONObject(getAdapterPosition());
 
                         // Open video in YouTube or Web Browser
-                        Uri youtubeUri = Uri.parse(BuildConfig.YOUTUBE_WATCH_URL).buildUpon()
+                        Uri youtubeUri = Uri.parse(mYoutubeWatchUrl).buildUpon()
                                 .appendPath(video.getString("video_id"))
                                 .build();
                         Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);

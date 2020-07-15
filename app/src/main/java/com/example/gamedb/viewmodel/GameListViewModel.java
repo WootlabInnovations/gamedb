@@ -16,7 +16,7 @@ public class GameListViewModel extends ViewModel {
         return games;
     }
 
-    public void loadGames(int page) {
-        new GameListAsyncTask(games).execute(page);
+    public void loadGames(int page, String userKey, String igdbBaseUrl) {
+        new GameListAsyncTask(games, userKey, igdbBaseUrl).execute(page);
     }
 }

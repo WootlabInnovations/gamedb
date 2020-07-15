@@ -1,7 +1,6 @@
 package com.example.gamedb.util;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.gamedb.BuildConfig;
 
@@ -24,7 +23,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class Utilities {
     private static final String LOG_TAG = Utilities.class.getName();
 
-    public static Object httpRequest(String requestType, String body, Uri uri) {
+    public static Object httpRequest(String requestType, String body, Uri uri, String userKey) {
         HttpsURLConnection httpsURLConnection = null;
         BufferedReader bufferedReader = null;
         StringBuilder stringBuilder = new StringBuilder();
@@ -35,7 +34,7 @@ public class Utilities {
             // Open URL connection
             httpsURLConnection = (HttpsURLConnection) requestUrl.openConnection();
             httpsURLConnection.setRequestMethod(requestType);
-            httpsURLConnection.setRequestProperty("user-key", BuildConfig.USER_KEY);
+            httpsURLConnection.setRequestProperty("user-key", userKey);
             httpsURLConnection.setRequestProperty("Accept", "application/json");
             httpsURLConnection.setDoInput(true);
             httpsURLConnection.setDoOutput(true);
