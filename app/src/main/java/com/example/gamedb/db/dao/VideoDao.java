@@ -10,12 +10,8 @@ import com.example.gamedb.db.entity.Video;
 
 @Dao
 public interface VideoDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Video... videos);
-
-    @Update
-    void update(Video... videos);
-
-    @Query("DELETE FROM Video WHERE expiryDate > :date")
-    void deleteAll(Long date);
+    /*
+     * TODO: Add Insert, Update and Delete Daos.
+     *  Refer to GameDao.java for examples, especially Delete
+     */
 }

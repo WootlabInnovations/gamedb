@@ -18,35 +18,5 @@ public class Genre {
         this.expiryDate = expiryDate;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Integer gameId) {
-        this.gameId = gameId;
-    }
-
-    public Long getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Long expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+    // TODO: Add Getters and Setters
 }

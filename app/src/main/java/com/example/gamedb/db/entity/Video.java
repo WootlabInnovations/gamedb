@@ -18,35 +18,5 @@ public class Video {
         this.expiryDate = expiryDate;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getVideoImage() {
-        return videoImage;
-    }
-
-    public void setVideoImage(String videoImage) {
-        this.videoImage = videoImage;
-    }
-
-    public Integer getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Integer gameId) {
-        this.gameId = gameId;
-    }
-
-    public Long getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Long expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+    // TODO: Add Getters and Setters
 }

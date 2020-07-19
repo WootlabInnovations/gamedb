@@ -10,12 +10,8 @@ import com.example.gamedb.db.entity.Screenshot;
 
 @Dao
 public interface ScreenshotDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Screenshot... screenshots);
-
-    @Update
-    void update(Screenshot... screenshots);
-
-    @Query("DELETE FROM Screenshot WHERE expiryDate > :date")
-    void deleteAll(Long date);
+    /*
+     * TODO: Add Insert, Update and Delete Daos.
+     *  Refer to GameDao.java for examples, especially Delete
+     */
 }

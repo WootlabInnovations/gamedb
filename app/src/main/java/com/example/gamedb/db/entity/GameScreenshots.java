@@ -6,9 +6,5 @@ import androidx.room.Relation;
 import java.util.List;
 
 public class GameScreenshots {
-    @Embedded
-    public Game game;
-
-    @Relation(parentColumn = "id", entityColumn = "gameId")
-    public List<Screenshot> screenshots;
+    // TODO: Complete One-To-Many Relationship
 }

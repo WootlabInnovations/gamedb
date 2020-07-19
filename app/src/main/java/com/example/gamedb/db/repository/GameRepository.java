@@ -47,17 +47,8 @@ public class GameRepository {
         return mGameDao.getGameGenres(id);
     }
 
-    public LiveData<GamePlatforms> getGamePlatforms(int id) {
-        return mGameDao.getGamePlatforms(id);
-    }
+    // TODO: Add repository methods for GamePlatforms, GameScreenshots and GameVideos
 
-    public LiveData<GameScreenshots> getGameScreenshots(int id) {
-        return mGameDao.getGameScreenshots(id);
-    }
-
-    public LiveData<GameVideos> getGameVideos(int id) {
-        return mGameDao.getGameVideos(id);
-    }
 
     private static class InsertAsyncTask extends AsyncTask<Game, Void, Void> {
         private GameDao mDao;

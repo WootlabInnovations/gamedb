@@ -19,35 +19,5 @@ public class Screenshot {
         this.expiryDate = expiryDate;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getScreenshotImage() {
-        return screenshotImage;
-    }
-
-    public void setScreenshotImage(String screenshotImage) {
-        this.screenshotImage = screenshotImage;
-    }
-
-    public Integer getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Integer gameId) {
-        this.gameId = gameId;
-    }
-
-    public Long getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Long expiryDate) {
-        this.expiryDate = expiryDate;
-    }
+    // TODO: Add Getters and Setters
 }

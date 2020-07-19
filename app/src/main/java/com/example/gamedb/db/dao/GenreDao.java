@@ -10,12 +10,8 @@ import com.example.gamedb.db.entity.Genre;
 
 @Dao
 public interface GenreDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Genre... genres);
-
-    @Update
-    void update(Genre... genres);
-
-    @Query("DELETE FROM Genre WHERE expiryDate > :date")
-    void deleteAll(Long date);
+    /*
+     * TODO: Add Insert, Update and Delete Daos.
+     *  Refer to GameDao.java for examples, especially Delete
+     */
 }

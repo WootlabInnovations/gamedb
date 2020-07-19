@@ -37,15 +37,8 @@ public interface GameDao {
     @Query("SELECT * FROM Game WHERE id = :id")
     LiveData<GameGenres> getGameGenres(int id);
 
-    @Transaction
-    @Query("SELECT * FROM Game WHERE id = :id")
-    LiveData<GamePlatforms> getGamePlatforms(int id);
+    /*
+      * TODO: Add Dao queries for GamePlatforms, GameScreenshots and GameVideos
+     */
 
-    @Transaction
-    @Query("SELECT * FROM Game WHERE id = :id")
-    LiveData<GameScreenshots> getGameScreenshots(int id);
-
-    @Transaction
-    @Query("SELECT * FROM Game WHERE id = :id")
-    LiveData<GameVideos> getGameVideos(int id);
 }

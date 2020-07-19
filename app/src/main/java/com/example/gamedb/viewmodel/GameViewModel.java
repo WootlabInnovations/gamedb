@@ -23,27 +23,5 @@ public class GameViewModel extends AndroidViewModel {
         mGameRepository = new GameRepository(application);
     }
 
-    public LiveData<List<Game>> listAll() {
-        return mGameRepository.listAll();
-    }
-
-    public LiveData<Game> getGame(int id) {
-        return mGameRepository.getGame(id);
-    }
-
-    public LiveData<GameGenres> getGameGenres(int id) {
-        return mGameRepository.getGameGenres(id);
-    }
-
-    public LiveData<GamePlatforms> getGamePlatforms(int id) {
-        return mGameRepository.getGamePlatforms(id);
-    }
-
-    public LiveData<GameScreenshots> getGameScreenshots(int id) {
-        return mGameRepository.getGameScreenshots(id);
-    }
-
-    public LiveData<GameVideos> getGameVideos(int id) {
-        return mGameRepository.getGameVideos(id);
-    }
+    // TODO: Complete GameViewModel methods, making calls to their respective repository methods.
 }

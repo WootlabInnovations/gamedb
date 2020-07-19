@@ -10,12 +10,8 @@ import com.example.gamedb.db.entity.Platform;
 
 @Dao
 public interface PlatformDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Platform... platforms);
-
-    @Update
-    void update(Platform... platforms);
-
-    @Query("DELETE FROM Platform WHERE expiryDate > :date")
-    void deleteAll(Long date);
+    /*
+     * TODO: Add Insert, Update and Delete Daos.
+     *  Refer to GameDao.java for examples, especially Delete
+     */
 }

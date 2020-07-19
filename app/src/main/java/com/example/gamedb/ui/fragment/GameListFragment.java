@@ -101,15 +101,8 @@ public class GameListFragment extends Fragment {
 
         mProgressBar = view.findViewById(R.id.progress_bar);
 
-        mGameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-        mGameViewModel.listAll().observe(getViewLifecycleOwner(), new Observer<List<Game>>() {
-            @Override
-            public void onChanged(List<Game> games) {
-                mProgressBar.setVisibility(View.GONE);
-                mGameListAdapter.setGames(games);
-                mGameListAdapter.notifyDataSetChanged();
-            }
-        });
+        // TODO: Initialize GameViewModel and observe method to update the view
+
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

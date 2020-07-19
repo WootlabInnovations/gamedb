@@ -98,101 +98,17 @@ public class GameDetailFragment extends Fragment {
             mVideoRecyclerView.setLayoutManager(videoLinearLayoutManager);
             mVideoRecyclerView.setAdapter(mVideoListAdapter);
 
-            mViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
-            mViewModel.getGame(mGameId).observe(getViewLifecycleOwner(), new Observer<Game>() {
-                @Override
-                public void onChanged(Game game) {
-                    displayGameDetail(game);
-                }
-            });
-            mViewModel.getGameGenres(mGameId).observe(getViewLifecycleOwner(),
-                    new Observer<GameGenres>() {
-                @Override
-                public void onChanged(GameGenres gameGenres) {
-                    displayGameGenres(gameGenres);
-                }
-            });
-            mViewModel.getGamePlatforms(mGameId).observe(getViewLifecycleOwner(),
-                    new Observer<GamePlatforms>() {
-                @Override
-                public void onChanged(GamePlatforms gamePlatforms) {
-                    displayGamePlatforms(gamePlatforms);
-                }
-            });
-            mViewModel.getGameScreenshots(mGameId).observe(getViewLifecycleOwner(),
-                    new Observer<GameScreenshots>() {
-                @Override
-                public void onChanged(GameScreenshots gameScreenshots) {
-                    mScreenshotListAdapter.setScreenshots(gameScreenshots.screenshots);
-                    mScreenshotListAdapter.notifyDataSetChanged();
-                }
-            });
-            mViewModel.getGameVideos(mGameId).observe(getViewLifecycleOwner(),
-                    new Observer<GameVideos>() {
-                @Override
-                public void onChanged(GameVideos gameVideos) {
-                    mVideoListAdapter.setVideos(gameVideos.videos);
-                    mVideoListAdapter.notifyDataSetChanged();
-                }
-            });
+            // TODO: Initialize view models and observe their methods required to update the view.
+
+
         }
 
         return mView;
     }
 
+    // TODO: Complete method to update the game details view
     private void displayGameDetail(Game game) {
-        if (game.getBackgroundImage() != null) {
-            Uri backgroundImageUri = Uri.parse(mIgdbImageUrl).buildUpon()
-                    .appendPath("t_screenshot_big")
-                    .appendPath(game.getBackgroundImage() + ".jpg")
-                    .build();
-            Glide.with(mView)
-                    .load(backgroundImageUri)
-                    .fitCenter()
-                    .into((ImageView) mView.findViewById(R.id.image_view_game_cover));
-        }
 
-        if (game.getPosterImage() != null) {
-            Uri posterImageUri = Uri.parse(mIgdbImageUrl).buildUpon()
-                    .appendPath("t_logo_med")
-                    .appendPath(game.getPosterImage() + ".jpg")
-                    .build();
-            Glide.with(mView)
-                    .load(posterImageUri)
-                    .fitCenter()
-                    .into((ImageView) mView.findViewById(R.id.image_view_game_poster));
-        }
-
-        if (game.getName() != null) {
-            TextView nameTextView = mView.findViewById(R.id.text_view_name);
-            nameTextView.setText(game.getName());
-        }
-
-        if (game.getFirstReleaseDate() != null) {
-            TextView releaseDateTextView = mView.findViewById(R.id.text_view_release_date);
-            try {
-                releaseDateTextView.setText(Utilities.convertTimestampToDate(String.valueOf(game
-                        .getFirstReleaseDate())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (game.getTotalRating() != null) {
-            TextView ratingTextView = mView.findViewById(R.id.text_view_rating);
-            ratingTextView.setText(String.valueOf(Utilities.convertDoubleToInteger(String.valueOf(game
-                    .getTotalRating()))));
-        }
-
-        if (game.getSummary() != null) {
-            TextView summaryTextView = mView.findViewById(R.id.text_view_summary);
-            summaryTextView.setText(game.getSummary());
-        }
-
-        if (game.getStoryline() != null) {
-            TextView storylineTextView = mView.findViewById(R.id.text_view_storyline);
-            storylineTextView.setText(game.getStoryline());
-        }
     }
 
     private void displayGameGenres(GameGenres gameGenres) {
@@ -214,22 +130,8 @@ public class GameDetailFragment extends Fragment {
         genreTextView.setText(genres.toString());
     }
 
+    // TODO: Complete method to update the game platforms view. Leverage the displayGameGenres() example
     private void displayGamePlatforms(GamePlatforms gamePlatforms) {
-        TextView platformsTextView = mView.findViewById(R.id.text_view_platforms);
-        StringBuilder platforms = new StringBuilder();
-        List<Platform> platformList = gamePlatforms.platforms;
-        for (int i = 0; i < platformList.size(); i++) {
-            if (i == 0 && i != platformList.size() - 1) {
-                platforms.append(" ")
-                        .append(platformList.get(i).getName())
-                        .append(", ");
-            } else if (i == platformList.size() - 1) {
-                platforms.append(platformList.get(i).getName());
-            } else {
-                platforms.append(platformList.get(i).getName())
-                        .append(", ");
-            }
-        }
-        platformsTextView.setText(platforms.toString());
+
     }
 }
