@@ -88,24 +88,11 @@ public class GameListFragment extends Fragment {
                 youtubeImageUrl.equals("") || youtubeVideoUrl.equals("")) {
             mListener.onNoSettingsProvided("Complete all settings fields.");
         } else {
-            Data inputDate = new Data.Builder()
-                    .putString(BASE_URL, mIgdbBaseUrl)
-                    .putString(USER_KEY, mUserKey)
-                    .build();
-
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-
-            WorkRequest downloadWorkRequest = new PeriodicWorkRequest.Builder(
-                    DownloadGamesWorker.class, 1, TimeUnit.DAYS)
-                    .setInputData(inputDate)
-                    .setConstraints(constraints)
-                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PeriodicWorkRequest
-                            .MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
-                    .build();
-
-            WorkManager.getInstance(requireContext()).enqueue(downloadWorkRequest);
+            /*
+             * TODO: Use a WorkManager to download games periodically.
+             *  https://developer.android.com/topic/libraries/architecture/workmanager
+             */
+            
         }
     }
 
