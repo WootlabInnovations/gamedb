@@ -89,7 +89,7 @@ public class GameListFragment extends Fragment {
             mListener.onNoSettingsProvided("Complete all settings fields.");
         } else {
             /*
-             * TODO: Use a WorkManager to download games periodically.
+             * TODO: Use a WorkManager to download games periodically (every 24 hours).
              *  https://developer.android.com/topic/libraries/architecture/workmanager
              */
             
