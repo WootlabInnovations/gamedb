@@ -3,7 +3,6 @@ package com.example.gamedb.ui.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,22 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.BackoffPolicy;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
 import com.example.gamedb.db.entity.Game;
-import com.example.gamedb.viewmodel.DownloadGameViewModel;
 import com.example.gamedb.viewmodel.GameViewModel;
+import com.example.gamedb.workermanager.DownloadGamesWorker;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameListFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -35,12 +42,13 @@ public class GameListFragment extends Fragment {
     private int mPage = 1;
     private int mLimit = 24;
     private GameViewModel mGameViewModel;
-    private DownloadGameViewModel mDownloadGameViewModel;
     private SharedPreferences mPreference;
     private String mUserKey;
     private String mIgdbBaseUrl;
 
     public static final String GAME_ID = "com.example.gamedb.GAME_ID";
+    public static final String BASE_URL = "com.example.gamedb.BASE_URL";
+    public static final String USER_KEY = "com.example.gamedb.USER_KEY";
 
     public GameListFragment() {
         // Required empty public constructor
@@ -80,9 +88,24 @@ public class GameListFragment extends Fragment {
                 youtubeImageUrl.equals("") || youtubeVideoUrl.equals("")) {
             mListener.onNoSettingsProvided("Complete all settings fields.");
         } else {
-            mDownloadGameViewModel = new ViewModelProvider(requireActivity()).get(
-                    DownloadGameViewModel.class);
-            mDownloadGameViewModel.downloadGames(mPage, mLimit, mUserKey, mIgdbBaseUrl);
+            Data inputDate = new Data.Builder()
+                    .putString(BASE_URL, mIgdbBaseUrl)
+                    .putString(USER_KEY, mUserKey)
+                    .build();
+
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            WorkRequest downloadWorkRequest = new PeriodicWorkRequest.Builder(
+                    DownloadGamesWorker.class, 1, TimeUnit.DAYS)
+                    .setInputData(inputDate)
+                    .setConstraints(constraints)
+                    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, PeriodicWorkRequest
+                            .MIN_PERIODIC_INTERVAL_MILLIS, TimeUnit.MILLISECONDS)
+                    .build();
+
+            WorkManager.getInstance(requireContext()).enqueue(downloadWorkRequest);
         }
     }
 
@@ -134,8 +157,6 @@ public class GameListFragment extends Fragment {
             } else {
                 mPage += 1;
             }
-
-            mDownloadGameViewModel.downloadGames(mPage, mLimit, mUserKey, mIgdbBaseUrl);
         }
     }
 

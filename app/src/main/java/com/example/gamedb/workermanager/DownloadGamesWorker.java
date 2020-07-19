@@ -1,19 +1,20 @@
-package com.example.gamedb.asynctask;
+package com.example.gamedb.workermanager;
 
+import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+import com.example.gamedb.db.GameDatabase;
 import com.example.gamedb.db.entity.Game;
 import com.example.gamedb.db.entity.Genre;
 import com.example.gamedb.db.entity.Platform;
 import com.example.gamedb.db.entity.Screenshot;
 import com.example.gamedb.db.entity.Video;
-import com.example.gamedb.db.repository.GameRepository;
-import com.example.gamedb.db.repository.GenreRepository;
-import com.example.gamedb.db.repository.PlatformRepository;
-import com.example.gamedb.db.repository.ScreenshotRepository;
-import com.example.gamedb.db.repository.VideoRepository;
+import com.example.gamedb.ui.fragment.GameListFragment;
 import com.example.gamedb.util.Utilities;
 
 import org.json.JSONArray;
@@ -22,56 +23,44 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
-public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
-    private String userKey;
-    private String igdbBaseUrl;
-    private GameRepository gameRepository;
-    private GenreRepository genreRepository;
-    private PlatformRepository platformRepository;
-    private ScreenshotRepository screenshotRepository;
-    private VideoRepository videoRepository;
+public class DownloadGamesWorker extends Worker {
+    private static final String LOG_TAG = DownloadGamesWorker.class.getCanonicalName();
 
-    private static final String LOG_TAG = DownloadGameAsyncTask.class.getCanonicalName();
-
-    public DownloadGameAsyncTask(GameRepository gameRepository, GenreRepository genreRepository,
-                                 PlatformRepository platformRepository,
-                                 ScreenshotRepository screenshotRepository,
-                                 VideoRepository videoRepository, String userKey,
-                                 String igdbBaseUrl) {
-        this.gameRepository = gameRepository;
-        this.genreRepository = genreRepository;
-        this.platformRepository = platformRepository;
-        this.screenshotRepository = screenshotRepository;
-        this.videoRepository = videoRepository;
-        this.userKey = userKey;
-        this.igdbBaseUrl = igdbBaseUrl;
+    public DownloadGamesWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
     }
 
+    @NonNull
     @Override
-    protected JSONArray doInBackground(Integer... integers) {
-        int page = integers[0];
-        int limit = integers[1];
-        int offset = (page - 1) * limit;
+    public Result doWork() {
+        try {
+            String igdbBaseUrl = getInputData().getString(GameListFragment.BASE_URL);
+            String userKey = getInputData().getString(GameListFragment.USER_KEY);
 
-        Uri uri = Uri.parse(igdbBaseUrl).buildUpon()
-                .appendPath("games")
-                .build();
+            Uri uri = Uri.parse(igdbBaseUrl).buildUpon()
+                    .appendPath("games")
+                    .build();
 
-        // We only want games from 2015
-        String body = "fields cover.*,artworks.*,cover.*,first_release_date,game_modes.*," +
-                "genres.*,name,platforms.*,screenshots.*,storyline," +
-                "summary,total_rating,total_rating_count,videos.*;" +
-                "where platforms.category = 1 & first_release_date > 1420070400;" +
-                "sort release_dates.date desc;" +
-                "limit " + limit + ";" +
-                "offset " + offset + ";";
+            // We only want the first 500 games from 2015
+            String body = "fields cover.*,artworks.*,cover.*,first_release_date,game_modes.*," +
+                    "genres.*,name,platforms.*,screenshots.*,storyline," +
+                    "summary,total_rating,total_rating_count,videos.*;" +
+                    "where platforms.category = 1 & first_release_date > 1420070400;" +
+                    "sort release_dates.date desc;" +
+                    "limit 500;";
 
-        return (JSONArray) Utilities.httpRequest("POST", body, uri, userKey);
+            JSONArray response = (JSONArray) Utilities.httpRequest("POST", body, uri,
+                    userKey);
+            saveGames(response);
+
+            return Result.success();
+        } catch (Exception ex) {
+            return Result.failure();
+        }
     }
 
-    @Override
-    protected void onPostExecute(JSONArray jsonArray) {
-        super.onPostExecute(jsonArray);
+    private void saveGames(JSONArray jsonArray) {
+        GameDatabase gameDatabase = GameDatabase.getDatabase(getApplicationContext());
 
         Log.d(LOG_TAG, "================= Starting Download =================");
 
@@ -109,7 +98,8 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                         backgroundImage = null;
                     }
 
-                    String posterImage = coverImage != null ? coverImage.getString("image_id") : null;
+                    String posterImage = coverImage != null ? coverImage.getString("image_id")
+                            : null;
                     String name = gameArray.getString("name");
                     Long firstReleaseDate = null;
                     if (gameArray.has("first_release_date")) {
@@ -133,7 +123,7 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
 
                     Game game = new Game(id, backgroundImage, posterImage, name, firstReleaseDate,
                             totalRating, summary, storyline, expiryDate.getTime());
-                    gameRepository.insert(game);
+                    gameDatabase.gameDao().insert(game);
 
                     // Genre information
                     Log.d(LOG_TAG, "================= Saving Genres =================");
@@ -143,7 +133,7 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                                     .getJSONObject(j);
                             int genreId = genreObject.getInt("id");
                             String genreName = genreObject.getString("name");
-                            genreRepository.insert(new Genre(genreId, genreName, id,
+                            gameDatabase.genreDao().insert(new Genre(genreId, genreName, id,
                                     expiryDate.getTime()));
                         }
                     }
@@ -156,8 +146,8 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                                     .getJSONObject(j);
                             int platformId = platformObject.getInt("id");
                             String platformName = platformObject.getString("name");
-                            platformRepository.insert(new Platform(platformId, platformName, id,
-                                    expiryDate.getTime()));
+                            gameDatabase.platformDao().insert(new Platform(platformId, platformName,
+                                    id, expiryDate.getTime()));
                         }
                     }
 
@@ -168,7 +158,7 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                             JSONObject videoObject = videoArray.getJSONObject(j);
                             int videoId = videoObject.getInt("id");
                             String videoImage = videoObject.getString("video_id");
-                            videoRepository.insert(new Video(videoId, videoImage, id,
+                            gameDatabase.videoDao().insert(new Video(videoId, videoImage, id,
                                     expiryDate.getTime()));
                         }
                     }
@@ -180,8 +170,8 @@ public class DownloadGameAsyncTask extends AsyncTask<Integer, Void, JSONArray> {
                             JSONObject screenshotObject = screenshotArray.getJSONObject(j);
                             int screenshotId = screenshotObject.getInt("id");
                             String screenshotImage = screenshotObject.getString("image_id");
-                            screenshotRepository.insert(new Screenshot(screenshotId, screenshotImage,
-                                    id, expiryDate.getTime()));
+                            gameDatabase.screenshotDao().insert(new Screenshot(screenshotId,
+                                    screenshotImage, id, expiryDate.getTime()));
                         }
                     }
                 }
