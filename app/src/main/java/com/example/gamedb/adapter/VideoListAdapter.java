@@ -8,28 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.gamedb.BuildConfig;
 import com.example.gamedb.R;
+import com.example.gamedb.db.entity.Video;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoListViewModel> {
-    private JSONArray mVideos = new JSONArray();
+    private List<Video> mVideos = new ArrayList<>();
 
-    public void setVideos(JSONArray videos) {
+    public void setVideos(List<Video> videos) {
         mVideos = videos;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -43,25 +38,21 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     @Override
     public void onBindViewHolder(@NonNull VideoListViewModel holder, int position) {
-        try {
-            JSONObject video = mVideos.getJSONObject(position);
-            Uri youtubeUri = Uri.parse(holder.mYoutubeImageUrl).buildUpon()
-                    .appendPath(video.getString("video_id"))
-                    .appendPath("0")
-                    .build();
+        Video video = mVideos.get(position);
+        Uri youtubeUri = Uri.parse(holder.mYoutubeImageUrl).buildUpon()
+                .appendPath(video.getVideoImage())
+                .appendPath("0")
+                .build();
 
-            Glide.with(holder.mContext)
-                    .load(youtubeUri.toString() + ".jpg")
-                    .fitCenter()
-                    .into(holder.mImageView);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Glide.with(holder.mContext)
+                .load(youtubeUri.toString() + ".jpg")
+                .fitCenter()
+                .into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        return mVideos.length();
+        return mVideos.size();
     }
 
     public class VideoListViewModel extends RecyclerView.ViewHolder {
@@ -84,18 +75,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        JSONObject video = mVideos.getJSONObject(getAdapterPosition());
+                    Video video = mVideos.get(getAdapterPosition());
 
-                        // Open video in YouTube or Web Browser
-                        Uri youtubeUri = Uri.parse(mYoutubeWatchUrl).buildUpon()
-                                .appendPath(video.getString("video_id"))
-                                .build();
-                        Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);
-                        mContext.startActivity(intent);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    // Open video in YouTube or Web Browser
+                    Uri youtubeUri = Uri.parse(mYoutubeWatchUrl).buildUpon()
+                            .appendPath(video.getVideoImage())
+                            .build();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, youtubeUri);
+                    mContext.startActivity(intent);
                 }
             });
         }

@@ -1,14 +1,13 @@
 package com.example.gamedb.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,20 +20,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
-import com.example.gamedb.ui.activity.SettingsActivity;
-import com.example.gamedb.viewmodel.GameListViewModel;
+import com.example.gamedb.db.entity.Game;
+import com.example.gamedb.viewmodel.DownloadGameViewModel;
+import com.example.gamedb.viewmodel.GameViewModel;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import java.util.List;
 
 public class GameListFragment extends Fragment {
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
     private GameListAdapter mGameListAdapter;
     private GridLayoutManager gridLayoutManager;
     private ProgressBar mProgressBar;
     private OnGameListFragmentInteractionListener mListener;
     private int mPage = 1;
-    private GameListViewModel mViewModel;
+    private int mLimit = 24;
+    private GameViewModel mGameViewModel;
+    private DownloadGameViewModel mDownloadGameViewModel;
     private SharedPreferences mPreference;
     private String mUserKey;
     private String mIgdbBaseUrl;
@@ -78,6 +79,10 @@ public class GameListFragment extends Fragment {
         if (mUserKey.equals("") || mIgdbBaseUrl.equals("") || igdbImageUrl.equals("") ||
                 youtubeImageUrl.equals("") || youtubeVideoUrl.equals("")) {
             mListener.onNoSettingsProvided("Complete all settings fields.");
+        } else {
+            mDownloadGameViewModel = new ViewModelProvider(requireActivity()).get(
+                    DownloadGameViewModel.class);
+            mDownloadGameViewModel.downloadGames(mPage, mLimit, mUserKey, mIgdbBaseUrl);
         }
     }
 
@@ -86,39 +91,27 @@ public class GameListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view_game_list_fragment);
+        mRecyclerView = view.findViewById(R.id.recycler_view_game_list_fragment);
 
         gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
 
         mGameListAdapter = new GameListAdapter(mListener);
-        recyclerView.setAdapter(mGameListAdapter);
+        mRecyclerView.setAdapter(mGameListAdapter);
 
         mProgressBar = view.findViewById(R.id.progress_bar);
 
-        mViewModel = new ViewModelProvider(requireActivity()).get(GameListViewModel.class);
-        mViewModel.loadGames(mPage, mUserKey, mIgdbBaseUrl);
-        mViewModel.getGames().observe(getViewLifecycleOwner(), new Observer<JSONArray>() {
+        mGameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        mGameViewModel.listAll().observe(getViewLifecycleOwner(), new Observer<List<Game>>() {
             @Override
-            public void onChanged(JSONArray jsonArray) {
-                if (jsonArray == null) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                } else {
-                    mProgressBar.setVisibility(View.GONE);
-                    if (mPage == 1) {
-                        mGameListAdapter.setGames(jsonArray);
-                    } else {
-                        try {
-                            mGameListAdapter.addMoreGames(jsonArray);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+            public void onChanged(List<Game> games) {
+                mProgressBar.setVisibility(View.GONE);
+                mGameListAdapter.setGames(games);
+                mGameListAdapter.notifyDataSetChanged();
             }
         });
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -129,14 +122,20 @@ public class GameListFragment extends Fragment {
         return view;
     }
 
-    public void loadMoreGames(RecyclerView recyclerView) {
+    private void loadMoreGames(RecyclerView recyclerView) {
         int lastPosition = ((GridLayoutManager) recyclerView.getLayoutManager())
                 .findLastCompletelyVisibleItemPosition();
-        if (lastPosition == mGameListAdapter.getItemCount() - 1) {
+        if (mGameListAdapter.getItemCount() >= mLimit && lastPosition == mGameListAdapter
+                .getItemCount() - 1) {
             mProgressBar.setVisibility(View.VISIBLE);
-            mPage += 1;
 
-            mViewModel.loadGames(mPage, mUserKey, mIgdbBaseUrl);
+            if (mGameListAdapter.getItemCount() > mLimit) {
+                mPage = (mGameListAdapter.getItemCount() / mLimit) + 1;
+            } else {
+                mPage += 1;
+            }
+
+            mDownloadGameViewModel.downloadGames(mPage, mLimit, mUserKey, mIgdbBaseUrl);
         }
     }
 

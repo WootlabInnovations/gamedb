@@ -13,20 +13,18 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.gamedb.BuildConfig;
 import com.example.gamedb.R;
+import com.example.gamedb.db.entity.Screenshot;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAdapter
         .ScreenshotViewHolder> {
-    private JSONArray mScreenshots = new JSONArray();
+    private List<Screenshot> mScreenshots = new ArrayList<>();
 
-    public void setScreenshots(JSONArray screenshots) {
+    public void setScreenshots(List<Screenshot> screenshots) {
         mScreenshots = screenshots;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -40,25 +38,21 @@ public class ScreenshotListAdapter extends RecyclerView.Adapter<ScreenshotListAd
 
     @Override
     public void onBindViewHolder(@NonNull ScreenshotViewHolder holder, int position) {
-        try {
-            JSONObject screenshot = mScreenshots.getJSONObject(position);
-            Uri imageUri = Uri.parse(holder.mIgdbImageUrl).buildUpon()
-                    .appendPath("t_screenshot_med")
-                    .appendPath(screenshot.getString("image_id") + ".jpg")
-                    .build();
+        Screenshot screenshot = mScreenshots.get(position);
+        Uri imageUri = Uri.parse(holder.mIgdbImageUrl).buildUpon()
+                .appendPath("t_screenshot_med")
+                .appendPath(screenshot.getScreenshotImage() + ".jpg")
+                .build();
 
-            Glide.with(holder.mContext)
-                    .load(imageUri.toString())
-                    .centerCrop()
-                    .into(holder.mImageView);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Glide.with(holder.mContext)
+                .load(imageUri.toString())
+                .centerCrop()
+                .into(holder.mImageView);
     }
 
     @Override
     public int getItemCount() {
-        return mScreenshots.length();
+        return mScreenshots.size();
     }
 
     public static class ScreenshotViewHolder extends RecyclerView.ViewHolder {

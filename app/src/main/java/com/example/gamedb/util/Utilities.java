@@ -2,8 +2,6 @@ package com.example.gamedb.util;
 
 import android.net.Uri;
 
-import com.example.gamedb.BuildConfig;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -16,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -94,5 +93,12 @@ public class Utilities {
     public static String convertTimestampToDate(String timestamp) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM, dd yyy");
         return simpleDateFormat.format(new Date(Long.parseLong(timestamp) * 1000));
+    }
+
+    public static Date calculateExpiryDate(Date date, int hours) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR_OF_DAY, hours);
+        return calendar.getTime();
     }
 }
