@@ -197,36 +197,6 @@ public class DownloadGamesWorker extends Worker {
     }
 
     private void sendNotification() {
-        String CHANNEL_ID = "Game_DB_NOTIFICATION_CHANNEL_ID";
-        String title = "Game DB";
-        String description = "Game DB Database Update";
-
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
-                    title, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.BLUE);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setDescription(description);
-
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
-                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
-                CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.ic_baseline_android_24)
-                .setContentText(description)
-                .setContentTitle(title)
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        notificationManager.notify(1, builder.build());
+        // TODO: Create notification configuration and build notification.
     }
 }
