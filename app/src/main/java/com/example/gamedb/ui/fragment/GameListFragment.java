@@ -28,7 +28,7 @@ import com.example.gamedb.R;
 import com.example.gamedb.adapter.GameListAdapter;
 import com.example.gamedb.db.entity.Game;
 import com.example.gamedb.viewmodel.GameViewModel;
-import com.example.gamedb.workermanager.DownloadGamesWorker;
+import com.example.gamedb.workmanager.DownloadGamesWorker;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

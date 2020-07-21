@@ -1,19 +1,30 @@
-package com.example.gamedb.workermanager;
+package com.example.gamedb.workmanager;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.gamedb.R;
 import com.example.gamedb.db.GameDatabase;
 import com.example.gamedb.db.entity.Game;
 import com.example.gamedb.db.entity.Genre;
 import com.example.gamedb.db.entity.Platform;
 import com.example.gamedb.db.entity.Screenshot;
 import com.example.gamedb.db.entity.Video;
+import com.example.gamedb.ui.activity.MainActivity;
 import com.example.gamedb.ui.fragment.GameListFragment;
 import com.example.gamedb.util.Utilities;
 
@@ -175,11 +186,47 @@ public class DownloadGamesWorker extends Worker {
                         }
                     }
                 }
+
+                sendNotification();
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         Log.d(LOG_TAG, "================= Finished Download =================");
+    }
+
+    private void sendNotification() {
+        String CHANNEL_ID = "Game_DB_NOTIFICATION_CHANNEL_ID";
+        String title = "Game DB";
+        String description = "Game DB Database Update";
+
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+                    title, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setDescription(description);
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),
+                CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_baseline_android_24)
+                .setContentText(description)
+                .setContentTitle(title)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        notificationManager.notify(1, builder.build());
     }
 }
