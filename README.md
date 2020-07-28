@@ -1,0 +1,6 @@
+![phone 1](snapshots/phone_1.png)
+![phone 1](snapshots/phone_2.png)
+![phone 1](snapshots/phone_3.png)
+![phone 1](snapshots/tablet_1.png)
+![phone 1](snapshots/tablet_2.png)
+![phone 1](snapshots/tablet_3.png)
